@@ -27,6 +27,8 @@ void Stack<type>::Push(const type& item)
 		type* ret = array;		
 		array = temp;
 		delete [] ret;
+		
+		capacity *= 2;
 	}
 	
 	array[ ++top ] = item;

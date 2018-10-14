@@ -6,9 +6,11 @@
 //
 // CSE221 Fall 2018
 //
+// Original version from Won-Ki Jeong
 //
 #include <iostream>
 #include <math.h>
+#include <assert.h>
 
 template<class type>
 class Stack
