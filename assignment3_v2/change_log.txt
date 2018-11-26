@@ -1,0 +1,113 @@
+------------------------- Change Log --------------------------------------
+
+v1. assignment#3
+
+v2. assignment3_v2
+
+> Differences between v1 and v2--------------------------------------------
+> In file "FlatHash.h"-----------------------------------------------------
+
+> Function 'ClearTombstones()' added in new version of handout.
+> Add it as member function.
+: line 43
+  + // Delete tombstones
+  + void ClearTombstones();
+  +
+: line 85
+  + void FlatHash::ClearTombstones()
+  + {
+  + 	// Write your code
+  + }
+  + 
+
+> In file "HierarchyHash.h"------------------------------------------------
+
+> Function 'ClearTombstones()' added in new version of handout.
+> Add it as member function.
+: line 43
+  + // Delete tombstones
+  + void ClearTombstones();
+  +
+: line 91
+  + void FlatHash::ClearTombstones()
+  + {
+  + 	// Write your code
+  + }
+  + 
+
+> In file "NRKFlat.h"------------------------------------------------------
+
+> To fix compilation problem form 'NRKFlat.h', include new library.
+: line 6
+  + #include <stdint.h>
+  +
+
+> To update the counter array, function 'Insert()' should be
+> overwrited.
+> Add it as member function.
+: line 28
+  + // Overwriting 
+  + int Insert(const unsigned int key);
+  + 
+
+> Have to use 'Call by reference' to cll the function 'MurMurHash2()'
+> ,not 'Call by value'. 
+> Delete(-) 'Call by value' and Add(+) 'Call by reference'.
+: line 94
+  - h1 = MurmurHash2(INT2VOIDP(key));
+  - h2 = MurmurHash2(INT2VOIDP(h1));
+  - h3 = MurmurHash2(INT2VOIDP(h2));
+  + h1 = MurmurHash2(INT2VOIDP(&key));
+  + h2 = MurmurHash2(INT2VOIDP(&h1));
+  + h3 = MurmurHash2(INT2VOIDP(&h2));
+
+> To update the counter array, function 'Insert()' should be 
+> overwrited.
+> Add it as member function.
+: line 110
+  + int NRKFlat::Insert(const unsigned int key)
+  + {
+  + 	// Write your code
+  + }
+  +
+
+> In file "main.cpp"-------------------------------------------------------
+
+> The cost of 'fh.Insert(5003)' is 9, not 3.
+: line 21
+  - std::cout << fh.Insert(5003) << std::endl;   // 3
+  + std::cout << fh.Insert(5003) << std::endl;   // 9
+
+> In file "main1.cpp" which was provided via Blackboard tests.zip file-----
+
+> The cost of 'fh2.Insert(a+=1000)' is 1003, not 1002
+: line 27
+ - std::cout << fh2.Insert(a+=1000) << std::endl;  // 1002
+ + std::cout << fh2.Insert(a+=1000) << std::endl;  // 1003
+
+> The cost of 'fh2.Insert(a+=1000)' is 1004, not 1003
+: line 28
+ - std::cout << fh2.Insert(a+=1000) << std::endl;  // 1003
+ + std::cout << fh2.Insert(a+=1000) << std::endl;  // 1004
+
+> In file "main2.cpp" which was provided via Blackboard tests.zip file-----
+
+> Add(+) 'hh.Remove(903)' 
+: line 35
+ + std::cout << hh.Remove(903) << std::endl;        // 1
+
+> As one key was removed, the number of keys should be 805, not 806. 
+: line 41
+ - std::cout << hh.GetNumofKeys() << std::endl;     // 806
+ + std::cout << hh.GetNumofKeys() << std::endl;     // 805
+
+> As one subhash became null, the allocated size should be 1000, not 1100. 
+: line 42
+ - std::cout << hh.GetAllocatedSize() << std::endl; // 1100
+ + std::cout << hh.GetAllocatedSize() << std::endl; // 1000
+
+> And 2 below test files have been added----------------------------------
+
+> main1.cpp
+> main2.cpp
+
