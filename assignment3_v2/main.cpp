@@ -14,7 +14,7 @@ int main()
 	std::cout << fh.Insert(2003) << std::endl;   // 3
 	std::cout << fh.Insert(2006) << std::endl;   // 1
 	std::cout << fh.Insert(3006) << std::endl;   // 3
-	fh.Print();   // [3:3,4:1003,5:2003,6:2006,7:7,8:3006] 
+	fh.Print();   // [3:3,4:1003,5:2003,6:2006,7:7,8:3006]
 	std::cout << fh.Insert(6) << std::endl;      // 4
 	std::cout << fh.Insert(3003) << std::endl;   // 8
 	fh.Print();   // [3:3,4:1003,5:2003,6:2006,7:7,8:3006,9:6,10:3003]

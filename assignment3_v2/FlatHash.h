@@ -9,6 +9,9 @@ enum overflow_handle {
 	QUDRATIC_PROBING
 };
 
+// Tombstone
+enum {T = 1000001};
+
 class FlatHash
 {
 private:
@@ -54,38 +57,196 @@ FlatHash::FlatHash(enum overflow_handle _flag)
 	flag = _flag;
 
 	// Write your code
+	hashtable = new unsigned int[table_size];
+	for(int i=0; i<table_size; i++)
+	  hashtable[i] = 0;
 
-
+	if(flag != LINEAR_PROBING && flag != QUDRATIC_PROBING)
+	{
+	  std::cout << "Input LINEAR_PROBING or QUDRATIC_PROBING" << std::endl;
+	  return;
+	}
 }
 
 FlatHash::~FlatHash()
 {
 	// Write your code
-
+	delete [] hashtable;
 }
 
 int FlatHash::Insert(const unsigned int key)
 {
 	// You have to implement two overflow handling by using flag
 	// Write your code
+	for(int i=0; i<table_size; i++)
+	{
+	  if(hashtable[i]==key){
+	    std::cout << "Already exist key" << std::endl;
+	    return 0;}
+	}
+	
+	int index;
+	int time_cost = 0;
+	double l_factor;
+	int q_fail = 0;
+	if(flag == QUDRATIC_PROBING)
+	{
+	  for(int j=0; j<table_size; j++)
+	  {
+	    index = (key + j*j)%table_size;
+	    if(hashtable[index]==0||hashtable[index]==T){
+	      time_cost++;
+	      hashtable[index] = key;
+	      num_of_keys++;
+	      return time_cost;}
+
+	    if(j==table_size-1) q_fail=1; //Fail in QUDRATIC_PROBING
+
+	    time_cost++;
+	  }
+	}
+	if(flag == LINEAR_PROBING || q_fail == 1)
+	{
+	  index = key%table_size;
+	  int j = 1;
+	  while(1)
+	  {
+	    if(hashtable[index]==0){
+	      time_cost++;
+	      hashtable[index] = key;
+	      num_of_keys++;
+
+	      l_factor = num_of_keys/table_size;
+	      if(l_factor >= 0.8)
+	      {
+		std::cout << "*****Resizing*****" << std::endl;
+		unsigned int *temp = new unsigned int[table_size];
+		for(int i=0; i<table_size; i++)
+		  temp[i] = hashtable[i];
+		table_size = table_size*2;
+		hashtable = new unsigned int[table_size];
+		for(int i=0; i<table_size; i++)
+		{
+		  if(i < (table_size/2))
+		    hashtable[i] = temp[i];
+		  else
+		    hashtable[i] = 0;
+		}
+		delete [] temp;
+	      }
+	      return time_cost;}
+	    index = (key + j)%table_size;
+	    j++;
+	    time_cost++;
+	  }
+	}
 }
 
 int FlatHash::Remove(const unsigned int key)
 {
 	// Write your code
+	int time_cost = 0;
+	int index;
+	int k;
+	if(flag == QUDRATIC_PROBING)
+	{
+	  for(int j=0; j<table_size; j++)
+	  {
+	    index = (key + j*j)%table_size;
+	    if(hashtable[index]==key){
+	      time_cost++;
+	      hashtable[index] = T;
+	      num_of_keys--;
+	      return time_cost;}
 
+	    time_cost++;
+	    if(hashtable[index]==0){
+	      std::cout << "No value to be removed" << std::endl;
+	      return time_cost;}
+	  }
+	}
+
+	if(flag == LINEAR_PROBING)
+	{ 
+	  index = key%table_size;
+	  int j = 1;
+	  while(1)
+	  {
+	    if(hashtable[index]==key){
+	      time_cost++;
+
+	      // removing and shifting
+	      for(int j=index+1; j<table_size; j++)
+	      {
+	        k = hashtable[index]%table_size;
+		if(hashtable[j]!=0){
+	          if(hashtable[j]%table_size <= k)
+	          {
+		    hashtable[index] = hashtable[j];
+		    hashtable[j] = 0;
+		    index = j;
+	          }}
+	      }
+	      return time_cost++;}
+
+	    if(index == 999){
+	      std::cout << "No value to be removed" << std::endl;
+	      return ++time_cost;}
+	    index = (key + j)%table_size;
+	    j++;
+	    time_cost++;
+	  }
+	}
 }
 
 int FlatHash::Search(const unsigned int key)
 {
 	// Write your code
+	int time_cost = 0;
+	int index;
 
+	if(flag == QUDRATIC_PROBING)
+	{
+	  for(int j=0; j<table_size; j++)
+	  {
+	    index = (key + j*j)%table_size;
+	    if(hashtable[index]==key){
+	      time_cost++;
+	      return time_cost;}
+
+	    time_cost++;
+	    if(hashtable[index]==0){
+	      std::cout << "Fail to search" << std::endl;
+	      return time_cost;}
+	  }
+	}
+
+	if(flag == LINEAR_PROBING)
+	{
+	  index = key%table_size;
+	  int j = 1;
+	  while(1)
+	  {
+	    if(hashtable[index]==key){
+	      time_cost++;
+	      return time_cost;}
+
+	    if(index==999){
+	      std::cout << "Fail to search" << std::endl;
+	      return ++time_cost;}
+
+	    index = (key + j)%table_size;
+	    j++;
+	    time_cost++;  
+	  }
+	}
 }
 
 void FlatHash::ClearTombstones()
 {
 	// Write your code
-	
+	for(int i=0; i<table_size; i++){
+	  if(hashtable[i]==T) hashtable[i]=0;}
 }
 
 void FlatHash::Print()
@@ -95,7 +256,18 @@ void FlatHash::Print()
 	std::cout << "[";
 
 	// Write your code
-
+	int comma = 0;
+	for(int i=0; i<table_size; i++)
+	{
+	  if(hashtable[i]!=0)
+	  {
+	    if(comma==1)
+	      std::cout << "," << i << ":" << hashtable[i];
+	    if(comma==0){
+	      std::cout << i << ":" << hashtable[i];
+	      comma = 1;}
+	  }
+	}
 
 	std::cout << "]" << std::endl;
 }
