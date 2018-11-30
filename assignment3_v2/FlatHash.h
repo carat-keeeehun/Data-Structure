@@ -107,10 +107,9 @@ int FlatHash::Insert(const unsigned int key)
 	}
 	if(flag == LINEAR_PROBING || q_fail == 1)
 	{
-	  index = key%table_size;
-	  int j = 1;
-	  while(1)
+	  for(int j=0; j<table_size; j++)
 	  {
+	    index = (key + j)%table_size;
 	    if(hashtable[index]==0){
 	      time_cost++;
 	      hashtable[index] = key;
@@ -135,8 +134,6 @@ int FlatHash::Insert(const unsigned int key)
 		delete [] temp;
 	      }
 	      return time_cost;}
-	    index = (key + j)%table_size;
-	    j++;
 	    time_cost++;
 	  }
 	}
@@ -174,6 +171,7 @@ int FlatHash::Remove(const unsigned int key)
 	  {
 	    if(hashtable[index]==key){
 	      time_cost++;
+	      num_of_keys--;
 
 	      // removing and shifting
 	      for(int j=index+1; j<table_size; j++)
