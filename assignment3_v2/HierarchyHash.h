@@ -149,8 +149,9 @@ int HierarchyHash::Insert(const unsigned int key)
 		for(int i=0; i<table_size/sub_table_size; i++)
 		  delete [] temp[i];
 		delete [] temp;
-	      }}
-	    return time_cost;
+	      }
+	      return time_cost;}
+	    time_cost++;
 	  }
 	}
 }
@@ -158,7 +159,33 @@ int HierarchyHash::Insert(const unsigned int key)
 int HierarchyHash::Remove(const unsigned int key)
 {
 	// Write your code
+	int time_cost = 0;
+	int idx;
+	int index;
+	int k;
+	if(flag == QUDRATIC_PROBING)
+	{
+	  for(int j=0; j<table_size; j++)
+	  {
+	    idx = (key + j*j)%table_size;
+	    index = (key + j*j)%sub_table_size;
+	    if(hashtable[idx/100]!=NULL){
+	      if(hashtable[idx/100][index]==key){
+	        time_cost++;
+	        hashtable[idx/100][index] = T;
+	        num_of_keys--;
+	        return time_cost;}}
 
+	    time_cost++;
+	    if(hashtable[idx/100]!=NULL && hashtable[idx/100][index]==0){
+	      std::cout << "No value to be removed" << std::endl;
+	      return time_cost;}
+	  }
+	}
+	if(flag == LINEAR_PROBING)
+	{
+	  
+	}
 }
 
 int HierarchyHash::Search(const unsigned int key)

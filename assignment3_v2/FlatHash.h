@@ -165,33 +165,40 @@ int FlatHash::Remove(const unsigned int key)
 
 	if(flag == LINEAR_PROBING)
 	{ 
-	  index = key%table_size;
-	  int j = 1;
-	  while(1)
+	  for(int j=0; j<table_size; j++)
 	  {
+	    index = (key + j)%table_size;
 	    if(hashtable[index]==key){
 	      time_cost++;
 	      num_of_keys--;
 
 	      // removing and shifting
-	      for(int j=index+1; j<table_size; j++)
+	      for(int i=index+1; i<table_size; i++)
 	      {
-	        k = hashtable[index]%table_size;
-		if(hashtable[j]!=0){
-	          if(hashtable[j]%table_size <= k)
-	          {
-		    hashtable[index] = hashtable[j];
-		    hashtable[j] = 0;
-		    index = j;
-	          }}
+		hashtable[index] = 0;
+		if(hashtable[i]%table_size <= index){
+		  hashtable[index] = hashtable[i];
+		  hashtable[i] = 0;
+		  index = i;}
 	      }
+/*
+	      k = hashtable[index]%table_size;
+	      for(int i=index+1; i<table_size; i++)
+	      {
+		if(hashtable[i]!=0){
+	          if(hashtable[i]%table_size <= k)
+	          {
+		    hashtable[index] = hashtable[i];
+		    hashtable[i] = 0;
+		    index = i;
+	          }
+		  else hashtable[index] = 0;}
+	      }*/
 	      return time_cost++;}
 
-	    if(index == 999){
+	    if(j == table_size-1){
 	      std::cout << "No value to be removed" << std::endl;
 	      return ++time_cost;}
-	    index = (key + j)%table_size;
-	    j++;
 	    time_cost++;
 	  }
 	}
