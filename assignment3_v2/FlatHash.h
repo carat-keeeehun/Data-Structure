@@ -87,7 +87,7 @@ int FlatHash::Insert(const unsigned int key)
 	
 	int index;
 	int time_cost = 0;
-	double l_factor;
+	double l_factor, n, t;
 	int q_fail = 0;
 	if(flag == QUDRATIC_PROBING)
 	{
@@ -115,7 +115,10 @@ int FlatHash::Insert(const unsigned int key)
 	      hashtable[index] = key;
 	      num_of_keys++;
 
-	      l_factor = num_of_keys/table_size;
+	      n = num_of_keys;
+	      t = table_size;
+	      l_factor = n/t;
+
 	      if(l_factor >= 0.8)
 	      {
 		std::cout << "*****Resizing*****" << std::endl;
@@ -123,6 +126,8 @@ int FlatHash::Insert(const unsigned int key)
 		for(int i=0; i<table_size; i++)
 		  temp[i] = hashtable[i];
 		table_size = table_size*2;
+		delete [] hashtable;
+
 		hashtable = new unsigned int[table_size];
 		for(int i=0; i<table_size; i++)
 		{
@@ -176,25 +181,19 @@ int FlatHash::Remove(const unsigned int key)
 	      for(int i=index+1; i<table_size; i++)
 	      {
 		hashtable[index] = 0;
-		if(hashtable[i]%table_size <= index){
-		  hashtable[index] = hashtable[i];
-		  hashtable[i] = 0;
-		  index = i;}
-	      }
-/*
-	      k = hashtable[index]%table_size;
-	      for(int i=index+1; i<table_size; i++)
-	      {
 		if(hashtable[i]!=0){
-	          if(hashtable[i]%table_size <= k)
-	          {
+		  if(hashtable[i]%table_size > index){
+		    if(hashtable[i]%table_size > i){
+		      hashtable[index] = hashtable[i];
+		      hashtable[i] = 0;
+		      index = i;}}
+		  if(hashtable[i]%table_size <= index){
 		    hashtable[index] = hashtable[i];
 		    hashtable[i] = 0;
-		    index = i;
-	          }
-		  else hashtable[index] = 0;}
-	      }*/
-	      return time_cost++;}
+		    index = i;}}
+		else break;
+	      }
+	      return time_cost;}
 
 	    if(j == table_size-1){
 	      std::cout << "No value to be removed" << std::endl;
@@ -228,21 +227,17 @@ int FlatHash::Search(const unsigned int key)
 
 	if(flag == LINEAR_PROBING)
 	{
-	  index = key%table_size;
-	  int j = 1;
-	  while(1)
+	  for(int j=0; j<table_size; j++)
 	  {
+	    index = (key + j)%table_size;
 	    if(hashtable[index]==key){
 	      time_cost++;
 	      return time_cost;}
 
-	    if(index==999){
+	    time_cost++;
+	    if(hashtable[index]==0){
 	      std::cout << "Fail to search" << std::endl;
-	      return ++time_cost;}
-
-	    index = (key + j)%table_size;
-	    j++;
-	    time_cost++;  
+	      return time_cost;}
 	  }
 	}
 }

@@ -7,6 +7,17 @@
 int main()
 {
 	FlatHash fh(LINEAR_PROBING);
+std::cout << fh.Insert(1) << std::endl;
+std::cout << fh.Insert(1001) << std::endl;
+std::cout << fh.Insert(999) << std::endl;
+std::cout << fh.Insert(1999) << std::endl;
+std::cout << fh.Insert(2999) << std::endl;
+fh.Print();
+std::cout << fh.Search(2999) << std::endl;
+std::cout << fh.Remove(1999) << std::endl;
+fh.Print();
+std::cout << fh.Search(2999) << std::endl;
+
 	std::cout << "fh, linear probing insert test"<<std::endl;
 	std::cout << fh.Insert(3) << std::endl;      // 1
 	std::cout << fh.Insert(7) << std::endl;      // 1
@@ -26,6 +37,12 @@ int main()
 	fh.Print();
 	std::cout << fh.Remove(3) << std::endl;
 	fh.Print();
+
+	for(int i = 100; i<900; i++)
+		fh.Insert(i);
+
+	std::cout << fh.GetTableSize() << std::endl;
+	std::cout << fh.GetNumofKeys() << std::endl;
 
 /*
 	std::cout << fh.Insert(6) << std::endl;      // 4
