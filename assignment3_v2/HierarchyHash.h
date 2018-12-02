@@ -93,13 +93,7 @@ int HierarchyHash::Insert(const unsigned int key)
 	int time_cost = 0;
 	double l_factor, n, t;
 	int q_fail = 0;
-//std::cout << "INSERT KEY : " << key << std::endl;
-if(key==1295){
-for(int i=0; i<20; i++){
-if(hashtable[i]!=NULL)
-std::cout << "hashtable[" << i << "] = " << hashtable[i] << std::endl;
-}
-}		
+		
 	if(flag == QUDRATIC_PROBING)
 	{
 	  for(int j=0; j<table_size; j++)
@@ -129,13 +123,7 @@ std::cout << "hashtable[" << i << "] = " << hashtable[i] << std::endl;
 	  {
 	    idx = (key + j)%table_size;
 	    index = (key + j)%sub_table_size;
-/*
-if(key>1293&&key<1296){
-std::cout << "key = " << key << std::endl;
-std::cout << "idx = " << idx << std::endl;
-std::cout << "hashtable[" << idx/100 << "] = " << hashtable[idx/100] << std::endl;
-}*/
-if(key==1903) std::cout << "key = " << key << std::endl;
+
 	    if(hashtable[idx/100] == NULL){
 	      hashtable[idx/100] = new unsigned int[sub_table_size];
 	      for(int i=0; i<sub_table_size; i++)
@@ -169,7 +157,7 @@ if(key==1903) std::cout << "key = " << key << std::endl;
 		  delete [] hashtable[i];
 		delete [] hashtable;
 
-		unsigned int **hashtable = new unsigned int*[2*table_size/sub_table_size];
+		hashtable = new unsigned int*[2*table_size/sub_table_size];
 		for(int i=0; i<2*table_size/sub_table_size; i++)
 		  hashtable[i] = NULL;
 
@@ -183,9 +171,7 @@ if(key==1903) std::cout << "key = " << key << std::endl;
 		for(int i=0; i<table_size/sub_table_size; i++)
 		  delete [] temp[i];
 		delete [] temp; 
-for(int i=0; i<20; i++){
-std::cout << "hashtable[" << i << "] = " << hashtable[i] << std::endl;
-}	      }
+	      }
 	      return time_cost;}
 	    time_cost++;
 	  }
@@ -225,29 +211,28 @@ std::cout << "REMOVE KEY = " << key << std::endl;
 	  {
 	    idx = (key + j)%table_size;
 	    index = (key + j)%sub_table_size;
-std::cout << "**********1" << std::endl;
-std::cout << "j = " << j << std::endl;
+
 	    if(hashtable[idx/100]!=NULL){
 	      if(hashtable[idx/100][index]==key){
 		time_cost++;
 		num_of_keys--;
-std::cout << "***********2" << std::endl;
+
 		//removing and shifting
-		for(int i=1; i<table_size; i++)
+		for(int i=idx+1; i<=idx+table_size; i++)
 		{
 		  hashtable[idx/100][index] = 0;
-		  if(hashtable[(idx+i)/100][(index+i)%100]!=0){
-		    if(hashtable[(idx+i)/100][(index+i)%100]%table_size > idx){
-		      if(hashtable[(idx+i)/100][(index+i)%100]%table_size > idx+i){
-			hashtable[idx/100][index] = hashtable[(idx+i)/100][(index+i)%100];
-			hashtable[(idx+i)/100][(index+i)%100] = 0;
-			idx = (idx+i)%table_size;
-			index = (index+i)%sub_table_size;}}
-		      if(hashtable[(idx+i)/100][(index+i)%100]%table_size <= idx){
-			hashtable[idx/100][index] = hashtable[(idx+i)/100][(index+i)%100];
-			hashtable[(idx+i)/100][(index+i)%100] = 0;
-			idx = (idx+i)%table_size;
-			index = (index+i)%sub_table_size;}}
+		  if(hashtable[i/100][i%100]!=0){
+		    if(hashtable[i/100][i%100]%table_size > idx){
+		      if(hashtable[i/100][i%100]%table_size > i){
+			hashtable[idx/100][index] = hashtable[i/100][i%100];
+			hashtable[i/100][i%100] = 0;
+			idx = i%table_size;
+			index = i%sub_table_size;}}
+		    if(hashtable[i/100][i%100]%table_size <= idx){
+		      hashtable[idx/100][index] = hashtable[i/100][i%100];
+		      hashtable[i/100][i%100] = 0;
+		      idx = i%table_size;
+		      index = i%sub_table_size;}}
 		  else break;
 		}
 

@@ -35,9 +35,8 @@ int main()
 	std::cout << hh.Remove(903) << std::endl;        // 1
 	hh.Print();   // 0:[3:3,7:7,98:98,99:99]
 		      // 9:[903:1903]
-	for (int i = 500; i < 1296; i++)
+	for (int i = 500; i < 1300; i++)
 	{
-	std::cout << "************ i = " << i << " ***********" <<std::endl;
 		hh.Insert(i);
 	}
 	std::cout << hh.GetTableSize() << std::endl;     // 2000

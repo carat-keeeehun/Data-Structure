@@ -115,6 +115,7 @@ int FlatHash::Insert(const unsigned int key)
 	      hashtable[index] = key;
 	      num_of_keys++;
 
+	      // Resizing
 	      n = num_of_keys;
 	      t = table_size;
 	      l_factor = n/t;
@@ -122,20 +123,46 @@ int FlatHash::Insert(const unsigned int key)
 	      if(l_factor >= 0.8)
 	      {
 		std::cout << "*****Resizing*****" << std::endl;
-		unsigned int *temp = new unsigned int[table_size];
-		for(int i=0; i<table_size; i++)
-		  temp[i] = hashtable[i];
 		table_size = table_size*2;
+		unsigned int *temp = new unsigned int[table_size];
+		for(int i=0; i<table_size; i++){
+		  if(i<table_size/2) temp[i] = hashtable[i];
+		  if(i>=table_size/2) temp[i] = 0;}
+
+		for(int k=0; k<table_size/2; k++)
+		{
+		  if(temp[k]%table_size >= table_size/2
+		     && temp[k]%table_size < table_size)
+		  {
+		    int a=0;
+		    while(1){
+		      if(temp[temp[k+a]%table_size]==0){
+			temp[temp[k+a]%table_size] = temp[k];
+			temp[k] = 0;
+			break;}
+		      else a++;}
+
+		    for(int i=k+1; i<=table_size; i++)
+		    {
+		      if(temp[i]!=0){
+			if(temp[i]%table_size > k){
+			  if(temp[i]%table_size > i){
+			    temp[k] = temp[i];
+			    temp[i] = 0;
+			    k = i%table_size;}}
+			if(temp[i]%table_size <= k){
+			  temp[k] = temp[i];
+			  temp[i] = 0;
+			  k = i%table_size;}}
+		      else break;
+	            }
+		  }
+		}
+		  
 		delete [] hashtable;
 
 		hashtable = new unsigned int[table_size];
-		for(int i=0; i<table_size; i++)
-		{
-		  if(i < (table_size/2))
-		    hashtable[i] = temp[i];
-		  else
-		    hashtable[i] = 0;
-		}
+		for(int i=0; i<table_size; i++) hashtable[i] = temp[i];
 		delete [] temp;
 	      }
 	      return time_cost;}
