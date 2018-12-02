@@ -135,40 +135,39 @@ int HierarchyHash::Insert(const unsigned int key)
 	      hashtable[idx/100][index] = key;
 	      num_of_keys++;
 
+	      // Resizing
 	      n = num_of_keys;
 	      t = table_size;
 	      l_factor = n/t;
 
 	      if(l_factor >= 0.8)
 	      {
-		std::cout << "******Resizing******" << std::endl;
-		unsigned int **temp = new unsigned int*[2*table_size/sub_table_size];
-		for(int i=0; i<2*table_size/sub_table_size; i++)
+		unsigned int **temp = new unsigned int*[table_size/sub_table_size];
+		for(int i=0; i<table_size/sub_table_size; i++)
 		  temp[i] = NULL;
 
 		for(int i=0; i<table_size/sub_table_size; i++){
-		  temp[i] = new unsigned int[sub_table_size];
-
 		  if(hashtable[i]!=NULL){
+		    temp[i] = new unsigned int[sub_table_size];
 		    for(int k=0; k<sub_table_size; k++)
 		      temp[i][k] = hashtable[i][k];}}
 
 		for(int i=0; i<table_size/sub_table_size; i++)
 		  delete [] hashtable[i];
 		delete [] hashtable;
-
-		hashtable = new unsigned int*[2*table_size/sub_table_size];
-		for(int i=0; i<2*table_size/sub_table_size; i++)
+		
+		num_of_keys = 0;
+		table_size = table_size*2;
+		hashtable = new unsigned int*[table_size/sub_table_size];
+		for(int i=0; i<table_size/sub_table_size; i++)
 		  hashtable[i] = NULL;
 
-		for(int i=0; i<table_size/sub_table_size; i++){
-		  hashtable[i] = new unsigned int[sub_table_size];
+		for(int i=0; i<table_size/sub_table_size/2; i++){
 		  if(temp[i]!=NULL){
-		    for(int k=0; k<sub_table_size; k++)
-		      hashtable[i][k] = temp[i][k];}}
+		    for(int k=0; k<sub_table_size; k++){
+		      Insert(temp[i][k]);}}}
 
-		table_size = table_size*2;
-		for(int i=0; i<table_size/sub_table_size; i++)
+		for(int i=0; i<table_size/sub_table_size/2; i++)
 		  delete [] temp[i];
 		delete [] temp; 
 	      }
@@ -185,7 +184,7 @@ int HierarchyHash::Remove(const unsigned int key)
 	int idx;
 	int index;
 	int empty;
-std::cout << "REMOVE KEY = " << key << std::endl;
+
 	if(flag == QUDRATIC_PROBING)
 	{
 	  for(int j=0; j<table_size; j++)
@@ -275,7 +274,6 @@ int HierarchyHash::Search(const unsigned int key)
 		return time_cost;}
 	      time_cost++;}
 	    if(hashtable[idx/100][index]==0){
-	      std::cout << "Fail to search" << std::endl;
 	      return time_cost;}
 	  }
 	}
@@ -291,7 +289,6 @@ int HierarchyHash::Search(const unsigned int key)
 		return time_cost;}
 	      time_cost++;}
 	    if(hashtable[idx/100][index]==0){
-	      std::cout << "Fail to search" << std::endl;
 	      return time_cost;}
 	  }
 	}

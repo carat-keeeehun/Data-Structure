@@ -122,7 +122,6 @@ int FlatHash::Insert(const unsigned int key)
 
 	      if(l_factor >= 0.8)
 	      {
-		std::cout << "*****Resizing*****" << std::endl;
 		table_size = table_size*2;
 		unsigned int *temp = new unsigned int[table_size];
 		for(int i=0; i<table_size; i++){
@@ -247,7 +246,6 @@ int FlatHash::Search(const unsigned int key)
 
 	    time_cost++;
 	    if(hashtable[index]==0){
-	      std::cout << "Fail to search" << std::endl;
 	      return time_cost;}
 	  }
 	}
@@ -263,7 +261,6 @@ int FlatHash::Search(const unsigned int key)
 
 	    time_cost++;
 	    if(hashtable[index]==0){
-	      std::cout << "Fail to search" << std::endl;
 	      return time_cost;}
 	  }
 	}
