@@ -178,7 +178,7 @@ int FlatHash::Remove(const unsigned int key)
 	      num_of_keys--;
 
 	      // removing and shifting
-	      for(int i=index+1; i<table_size; i++)
+	      for(int i=index+1; i<=index+table_size; i++)
 	      {
 		hashtable[index] = 0;
 		if(hashtable[i]!=0){
@@ -186,11 +186,11 @@ int FlatHash::Remove(const unsigned int key)
 		    if(hashtable[i]%table_size > i){
 		      hashtable[index] = hashtable[i];
 		      hashtable[i] = 0;
-		      index = i;}}
+		      index = i%table_size;}}
 		  if(hashtable[i]%table_size <= index){
 		    hashtable[index] = hashtable[i];
 		    hashtable[i] = 0;
-		    index = i;}}
+		    index = i%table_size;}}
 		else break;
 	      }
 	      return time_cost;}
