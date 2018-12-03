@@ -38,7 +38,11 @@ public:
 NRKFlat::NRKFlat(enum overflow_handle _flag) : FlatHash(_flag)
 {
 	// Write your code
-
+	int tsize = GetTableSize();
+	counters = new unsigned int[tsize];
+	for(int i=0; i<tize; i++)
+	  counters[i] = 0;
+	
 }
 
 NRKFlat::~NRKFlat()
@@ -103,7 +107,7 @@ bool NRKFlat::Filter(const unsigned int key)
 	GetMMHashValue(key, h1, h2, h3);
 
 	// Write your code
-
+	
 	
 }
 
