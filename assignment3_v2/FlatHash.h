@@ -125,43 +125,21 @@ int FlatHash::Insert(const unsigned int key)
 		table_size = table_size*2;
 		unsigned int *temp = new unsigned int[table_size];
 		for(int i=0; i<table_size; i++){
-		  if(i<table_size/2) temp[i] = hashtable[i];
-		  if(i>=table_size/2) temp[i] = 0;}
+		  if(i<table_size/2)
+		    temp[i] = hashtable[i];
+		  else
+		    temp[i] = 0;}
 
-		for(int k=0; k<table_size/2; k++)
-		{
-		  if(temp[k]%table_size >= table_size/2
-		     && temp[k]%table_size < table_size)
-		  {
-		    int a=0;
-		    while(1){
-		      if(temp[temp[k+a]%table_size]==0){
-			temp[temp[k+a]%table_size] = temp[k];
-			temp[k] = 0;
-			break;}
-		      else a++;}
-
-		    for(int i=k+1; i<=table_size; i++)
-		    {
-		      if(temp[i]!=0){
-			if(temp[i]%table_size > k){
-			  if(temp[i]%table_size > i){
-			    temp[k] = temp[i];
-			    temp[i] = 0;
-			    k = i%table_size;}}
-			if(temp[i]%table_size <= k){
-			  temp[k] = temp[i];
-			  temp[i] = 0;
-			  k = i%table_size;}}
-		      else break;
-	            }
-		  }
-		}
-		  
 		delete [] hashtable;
+		num_of_keys = 0;
 
 		hashtable = new unsigned int[table_size];
-		for(int i=0; i<table_size; i++) hashtable[i] = temp[i];
+		for(int i=0; i<table_size; i++)
+		  hashtable[i] = 0;
+
+		for(int i=0; i<table_size; i++){
+		  if(temp[i]!=0) this->Insert(temp[i]);}
+
 		delete [] temp;
 	      }
 	      return time_cost;}
@@ -269,8 +247,22 @@ int FlatHash::Search(const unsigned int key)
 void FlatHash::ClearTombstones()
 {
 	// Write your code
+	int n = -1;
+	int nk = num_of_keys;
+	unsigned int *temp = new unsigned int[nk];
 	for(int i=0; i<table_size; i++){
-	  if(hashtable[i]==T) hashtable[i]=0;}
+	  if(hashtable[i]==T)
+	    hashtable[i]=0;
+	  if(hashtable[i]!=0){
+	    temp[++n] = hashtable[i];
+	    hashtable[i] = 0;}}
+
+	num_of_keys = 0;
+
+	for(int i=0; i<nk; i++)
+	  this->Insert(temp[i]);
+
+	delete [] temp;
 }
 
 void FlatHash::Print()
@@ -283,7 +275,7 @@ void FlatHash::Print()
 	int comma = 0;
 	for(int i=0; i<table_size; i++)
 	{
-	  if(hashtable[i]!=0)
+	  if(hashtable[i]!=0 && hashtable[i]!=T)
 	  {
 	    if(comma==1)
 	      std::cout << "," << i << ":" << hashtable[i];

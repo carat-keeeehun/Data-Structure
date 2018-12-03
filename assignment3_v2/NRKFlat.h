@@ -39,16 +39,16 @@ NRKFlat::NRKFlat(enum overflow_handle _flag) : FlatHash(_flag)
 {
 	// Write your code
 	int tsize = GetTableSize();
-	counters = new unsigned int[tsize];
-	for(int i=0; i<tize; i++)
-	  counters[i] = 0;
 	
+	counters = new unsigned int[tsize];
+	for(int i=0; i<tsize; i++)
+	  counters[i] = 0;
 }
 
 NRKFlat::~NRKFlat()
 {
 	// Write your code
-
+	delete [] counters;
 }
 
 unsigned int NRKFlat::MurmurHash2(const void* key){
@@ -107,26 +107,86 @@ bool NRKFlat::Filter(const unsigned int key)
 	GetMMHashValue(key, h1, h2, h3);
 
 	// Write your code
+	int tsize = GetTableSize();
+	if(h1<0) h1=-h1;
+	if(h2<0) h2=-h2;
+	if(h3<0) h3=-h3;
+	h1 = h1%tsize;
+	h2 = h2%tsize;
+	h3 = h3%tsize;
 	
-	
+	bool exist = true;
+	if(counters[h1]==0) exist = false;
+	if(counters[h2]==0) exist = false;
+	if(counters[h3]==0) exist = false;
+
+	return exist;
 }
 
 int NRKFlat::Insert(const unsigned int key)
 {
 	// Write your code
-	
+	int h1, h2, h3;
+	GetMMHashValue(key, h1, h2, h3);
+
+	int tsize = GetTableSize();
+	double t = tsize;
+	double nok = GetNumofKeys();
+	double lf = 0;
+
+	if(h1<0) h1=-h1;
+	if(h2<0) h2=-h2;
+	if(h3<0) h3=-h3;
+	h1 = h1%tsize;
+	counters[h1]++;
+	h2 = h2%tsize;
+	counters[h2]++;
+	h3 = h3%tsize;
+	counters[h3]++;
+
+	lf = (nok+1)/t;
+	if(lf >= 0.8)
+	{ // Case of resizing
+	  delete [] counters;
+	  counters = new unsigned int[tsize*2];
+	  for(int i=0; i<tsize*2; i++)
+	    counters[i] = 0;
+	  return FlatHash::Insert(key);
+	}
+	else
+	  return FlatHash::Insert(key);
 }
 
 int NRKFlat::Remove(const unsigned int key)
 {
 	// Write your code
+	int h1, h2, h3;
+	GetMMHashValue(key, h1, h2, h3);
 
+	int tsize = GetTableSize();
+	double t = tsize;
+
+	if(h1<0) h1=-h1;
+	if(h2<0) h2=-h2;
+	if(h3<0) h3=-h3;
+	h1 = h1%tsize;
+	counters[h1]--;
+	h2 = h2%tsize;
+	counters[h2]--;
+	h3 = h3%tsize;
+	counters[h3]--;
+
+	return FlatHash::Remove(key);
 }
 
 int NRKFlat::Search(const unsigned int key)
 {
 	// Write your code
-
+	bool k = Filter(key);
+	if(k==false)
+	  return 0;
+	else
+	  return FlatHash::Search(key);
 }
 
 #endif

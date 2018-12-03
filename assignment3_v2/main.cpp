@@ -44,6 +44,12 @@ std::cout << fh.Search(2999) << std::endl;
 	std::cout << fh.GetTableSize() << std::endl;
 	std::cout << fh.GetNumofKeys() << std::endl;
 
+	for(int i = 150; i<850; i++)
+		fh.Remove(i);
+
+	std::cout << fh.GetTableSize() << std::endl;
+	std::cout << fh.GetNumofKeys() << std::endl;
+	fh.Print();
 /*
 	std::cout << fh.Insert(6) << std::endl;      // 4
 	std::cout << fh.Insert(3003) << std::endl;   // 8
