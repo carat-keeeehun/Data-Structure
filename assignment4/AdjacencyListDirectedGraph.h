@@ -112,14 +112,14 @@ public:
      * Return the element stored at this vertex.
      */
     V& operator*() const {
-
+	return this->VertexObject.elt;
     }
 
     /*
      * Return a list of edges incident to this vertex.
      */
     EdgeList incidentEdges() const {
-
+	
     }
 
     /*

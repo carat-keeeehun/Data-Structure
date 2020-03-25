@@ -6,8 +6,7 @@
 //
 // CSE221 Fall 2018
 //
-// Original version from Won-Ki Jeong
-//
+// unist 20131218 parkkeehun
 #include <iostream>
 #include <math.h>
 #include <assert.h>
@@ -15,6 +14,12 @@
 template<class type>
 class Stack
 {
+private:
+	// Data
+	type *array;
+	int capacity;
+	int top;
+
 public:
 	// Default constructor 
 	Stack(){
@@ -40,12 +45,6 @@ public:
 	};
 	
 	int Size() { return top+1; }
-	
-private:
-	// Data
-	type *array;
-	int capacity;
-	int top;
 };
 
 #ifndef STACK_TXX

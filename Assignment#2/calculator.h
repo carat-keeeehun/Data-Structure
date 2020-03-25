@@ -6,6 +6,8 @@
 //
 // CSE231 Fall 2018
 //
+// unist 20131218 parkkeehun
+
 #include "stack.h"
 #include <cstring>
 #include <iostream>

@@ -10,7 +10,7 @@ int main()
 	std::cout << "fh, linear probing insert test"<<std::endl;
 	std::cout << fh.Insert(3) << std::endl;      // 1
 	std::cout << fh.Insert(7) << std::endl;      // 1
-	std::cout << fh.Insert(1003) << std::endl;	 // 2
+	std::cout << fh.Insert(1003) << std::endl;   // 2
 	std::cout << fh.Insert(2003) << std::endl;   // 3
 	std::cout << fh.Insert(2006) << std::endl;   // 1
 	std::cout << fh.Insert(3006) << std::endl;   // 3

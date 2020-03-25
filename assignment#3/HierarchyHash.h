@@ -1,6 +1,8 @@
 #ifndef HIERARCHYHASH_H
 #define HIERARCHYHASH_H
 
+// unist 20131218 parkkeehun
+
 #include <iostream>
 #include "FlatHash.h"
 

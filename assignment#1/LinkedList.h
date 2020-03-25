@@ -1,4 +1,5 @@
 // CSE221 Assignment 1
+// unsit 20131218 parkkeehun
 
 #ifndef LinkedList_h
 #define LinkedList_h
@@ -16,6 +17,7 @@ public:
 	Node<Type> *next;
 };
 
+/* Single Linked List */
 template <typename Type>
 class LinkedList
 {
@@ -67,10 +69,7 @@ public:
 
 };
 
-/*
- *	Implementation
- */
-
+/* Constructor */
 template <typename Type>
 LinkedList<Type>::LinkedList()
 {
@@ -78,12 +77,14 @@ LinkedList<Type>::LinkedList()
   this->head = NULL;
 }
 
+/* Destructor */
 template <typename Type>
 LinkedList<Type>::~LinkedList()
 {
-
+  delete[] head;
 }
 
+/* Retrieve the value located at index-th element in linked list. */
 template <typename Type>
 Type LinkedList<Type>::Get(const int index)
 {
@@ -91,6 +92,7 @@ Type LinkedList<Type>::Get(const int index)
   int item_;
   A = this->head;
 
+  // Invalid index
   if( index < 0 || index >= this->length )
     return -1;
 
@@ -103,6 +105,7 @@ Type LinkedList<Type>::Get(const int index)
   return item_;
 }
 
+/* Insert an element containing val at the head of the linked list. */
 template <typename Type>
 void LinkedList<Type>::AddAtHead(const Type& val)
 { 
@@ -127,6 +130,8 @@ void LinkedList<Type>::AddAtHead(const Type& val)
   this->length++;
 }
 
+/* Insert an element containing val to a specific location such that
+ * after the insertion, the val is located at index. */
 template <typename Type>
 void LinkedList<Type>::AddAtIndex(const int index, const Type& val)
 {
@@ -174,6 +179,7 @@ void LinkedList<Type>::AddAtIndex(const int index, const Type& val)
   else cout << "Invalid index" << endl;
 }
 
+/* Delete an element located at index. */
 template <typename Type>
 void LinkedList<Type>::DeleteAtIndex(const int index)
 {
@@ -214,6 +220,8 @@ void LinkedList<Type>::DeleteAtIndex(const int index)
   }
 }
 
+/* Delete an element that contains val. If list has multiple
+ * elements, then delete the first encountered one only. */
 template <typename Type>
 void LinkedList<Type>::DeleteValue(const Type& val)
 {
@@ -235,6 +243,7 @@ void LinkedList<Type>::DeleteValue(const Type& val)
   DeleteAtIndex(index_);
 }
 
+/* Move the first element containing val to the head of the list */
 template <typename Type>
 void LinkedList<Type>::MoveToHead(const Type& val)
 {
@@ -249,9 +258,11 @@ void LinkedList<Type>::MoveToHead(const Type& val)
   }
 }
 
+/* Rotate the linked list right by steps times. */
 template <typename Type>
 void LinkedList<Type>::Rotate(const int steps)
 {
+  // Only consider positive steps.
   if(steps<0) return;
 
   int n = steps;
@@ -266,6 +277,8 @@ void LinkedList<Type>::Rotate(const int steps)
   }
 }
 
+/* Delete all duplicates except only one element that you
+ * encounter first */
 template <typename Type>
 void LinkedList<Type>::Reduce()
 {
@@ -279,6 +292,7 @@ void LinkedList<Type>::Reduce()
   }
 }
 
+/* Swap every two neighboring elements */
 template <typename Type>
 void LinkedList<Type>::Swap()
 {
@@ -306,12 +320,14 @@ void LinkedList<Type>::Swap()
   }
 }
 
+/* Return the number of elements in the linked list. */
 template <typename Type>
 int LinkedList<Type>::Size()
 {
   return this->length;
 }
 
+/* Delete all elements from the linked list. */
 template <typename Type>
 void LinkedList<Type>::CleanUp()
 {
@@ -324,6 +340,8 @@ void LinkedList<Type>::CleanUp()
   }
 }
 
+/* Print out all current elements in the linked list in order.
+ * e.g)  (4,2,5,3,6,1,5,2) */
 template <typename Type>
 void LinkedList<Type>::Print()
 {

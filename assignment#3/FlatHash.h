@@ -1,6 +1,8 @@
 #ifndef FLATHASH_H
 #define FLATHASH_H
 
+// unist 20131218 parkkeehun
+
 #include <iostream>
 
 // Flag(hint) for overflow handling
